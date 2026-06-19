@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import * as bcrypt from 'bcrypt'
 
@@ -14,6 +14,10 @@ export class AdminService {
       data: {
         ...createAdminDto,
         password: hashPassword
+      },
+      select: {
+        id: true,
+        username: true,
       }
     });
   }

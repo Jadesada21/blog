@@ -24,8 +24,6 @@ async function bootstrap() {
     })
   )
 
-  app.setGlobalPrefix('/')
-
   const port = configService.get<number>('PORT') || 6060
 
   await app.listen(port);
