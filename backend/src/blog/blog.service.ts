@@ -4,12 +4,17 @@ import { UpdatePublishedDto } from './dto/published-blog.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import slugify from 'slugify'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { UpdateBlogDto } from './dto/update-blog.dto';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 
 @Injectable()
 @UseGuards(JwtAuthGuard)
 export class BlogService {
-  constructor(private prisma: PrismaService) { }
+  constructor(
+    private prisma: PrismaService,
+    private cloudinaryService: CloudinaryService
+  ) { }
 
   async create(createBlogDto: CreateBlogDto) {
     const baseSlug = slugify(createBlogDto.title, { lower: true, strict: true })
@@ -66,6 +71,31 @@ export class BlogService {
 
     if (!blog) { throw new NotFoundException(`Blog id ${id} not found`) }
     return blog;
+  }
+
+  async update(id: number, updateBlogDto: UpdateBlogDto) {
+    await this.findOne(id)
+
+    return this.prisma.blog.update({
+      where: { id },
+      data: { ...updateBlogDto },
+    })
+  }
+
+  async updateCoverImage(id: number, file: Express.Multer.File) {
+    const blog = await this.prisma.blog.findUnique({ where: { id } })
+    if (!blog) { throw new NotFoundException(`Blog id ${id} not found`) }
+
+    if (blog.coverImagePublicId) {
+      await this.cloudinaryService.deleteImage(blog.coverImagePublicId)
+    }
+
+    const { url, publicId } = await this.cloudinaryService.uploadImage(file)
+
+    return this.prisma.blog.update({
+      where: { id },
+      data: { coverImage: url, coverImagePublicId: publicId }
+    })
   }
 
   async togglePublished(id: number, updatePublishedDto: UpdatePublishedDto) {

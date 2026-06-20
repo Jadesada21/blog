@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Query, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { BlogService } from './blog.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdatePublishedDto } from './dto/published-blog.dto';
+import { UpdateBlogDto } from './dto/update-blog.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('blog')
 export class BlogController {
@@ -20,6 +22,17 @@ export class BlogController {
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.blogService.findOne(+id);
+  }
+
+  @Patch(':id/update')
+  update(@Param('id') id: number, updateBlogDto: UpdateBlogDto) {
+    return this.blogService.update(+id, updateBlogDto)
+  }
+
+  @Patch(':id/cover')
+  @UseInterceptors(FileInterceptor('coverImage'))
+  updateCoverImage(@Param('id') id: number, @UploadedFile() file: Express.Multer.File) {
+    return this.blogService.updateCoverImage(+id, file)
   }
 
   @Patch(':id/toggle')
