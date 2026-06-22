@@ -3,6 +3,7 @@ import { IsNotEmpty, IsString, MinLength } from "class-validator";
 export class CreateAdminDto {
     @IsString()
     @IsNotEmpty()
+    @MinLength(4)
     username!: string
 
     @IsString()

@@ -8,13 +8,14 @@ import { AdminModule } from './admin/admin.module';
 import { ConfigModule } from '@nestjs/config';
 import { BlogImageService } from './blog-image/blog-image.service';
 import { BlogImageModule } from './blog-image/blog-image.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true
     }),
-    AuthModule, PrismaModule, AdminModule, BlogImageModule],
+    AuthModule, PrismaModule, AdminModule, BlogImageModule, CommentModule],
   controllers: [AppController],
   providers: [AppService, PrismaService, BlogImageService],
 })
