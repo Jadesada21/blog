@@ -9,7 +9,6 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UpdateSlugDto } from './dto/update-slug-blog.dto';
 
 @Controller('blog')
-@UseGuards(JwtAuthGuard)
 export class BlogController {
   constructor(private readonly blogService: BlogService) { }
 
@@ -29,32 +28,38 @@ export class BlogController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   update(@Param('id') id: number, @Body() updateBlogDto: UpdateBlogDto) {
     return this.blogService.update(+id, updateBlogDto)
   }
 
   @Patch(':id/cover')
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('coverImage', imageUploadOptions))
   updateCoverImage(@Param('id') id: number, @Body() @UploadedFile() file: Express.Multer.File) {
     return this.blogService.updateCoverImage(+id, file)
   }
 
   @Patch(':id/toggle')
+  @UseGuards(JwtAuthGuard)
   togglePublished(@Param('id') id: number, @Body() updatePublishedDto: UpdatePublishedDto) {
     return this.blogService.togglePublished(+id, updatePublishedDto);
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   softDelete(@Param('id') id: number) {
     return this.blogService.softDelete(+id)
   }
 
   @Patch(':id/restore')
+  @UseGuards(JwtAuthGuard)
   restore(@Param('id') id: number) {
     return this.blogService.restore(+id)
   }
 
   @Patch(':/id/slug')
+  @UseGuards(JwtAuthGuard)
   updateSlug(@Param('id') id: number, @Body() updateSlugDto: UpdateSlugDto) {
     return this.blogService.updateSlug(+id, updateSlugDto)
   }
