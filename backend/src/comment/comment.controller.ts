@@ -15,7 +15,7 @@ export class CommentController {
 
     @Patch(':id')
     @UseGuards(JwtAuthGuard)
-    updateApproved(@Param('id') id: s, @Body() updateCommentDto: UpdateCommentDto) {
+    updateApproved(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto) {
         return this.commentService.updateApproved(+id, updateCommentDto.isApproved)
     }
 }
