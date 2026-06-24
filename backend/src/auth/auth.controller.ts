@@ -22,7 +22,10 @@ export class AuthController {
   }
 
   @Post()
-  logout() {
-    return this.authService.logout()
+  logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('token')
+    return {
+      message: "Logout successfully"
+    }
   }
 }

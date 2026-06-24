@@ -32,9 +32,5 @@ export class AuthService {
     return { accessToken, id: user.id, username: user.username, message: "Login uccessfully" };
   }
 
-  logout() {
-    return {
-      message: "Logout Successfully"
-    }
-  }
+
 }
