@@ -6,6 +6,10 @@ import { CreateCommentDto } from './dto/create-comment.dto';
 export class CommentService {
     constructor(private prisma: PrismaService) { }
 
+    async findAll() {
+        return this.prisma.comment.findMany()
+    }
+
     async addComment(blogId: number, createCommentDto: CreateCommentDto) {
         const blog = await this.prisma.blog.findUnique({ where: { id: blogId } })
         if (!blog || !blog.isPublished) {

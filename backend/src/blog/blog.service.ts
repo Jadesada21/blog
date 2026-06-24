@@ -55,7 +55,21 @@ export class BlogService {
   }
 
   async findOne(id: number) {
-    const blog = await this.prisma.blog.findFirst({ where: { id, deletedAt: null } })
+    const blog = await this.prisma.blog.findFirst({
+      where: { id, deletedAt: null },
+      include: {
+        comment: {
+          where: { isApproved: true },
+          orderBy: { createdAt: 'desc' }
+        },
+        images: {
+          select: {
+            id: true,
+            url: true
+          }
+        }
+      }
+    })
 
     if (!blog) { throw new NotFoundException(`Blog id ${id} not found`) }
     return blog;
