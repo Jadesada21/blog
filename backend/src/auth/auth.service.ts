@@ -33,4 +33,7 @@ export class AuthService {
   }
 
 
+  async refreshMe(user: { id: number, username: string }) {
+    return user
+  }
 }

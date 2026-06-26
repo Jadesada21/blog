@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Body, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Res, UseGuards, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import type { Response } from 'express';
+import { JwtAuthGuard } from './jwt-auth.guard';
+import { CurrentUser } from './current-user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -21,7 +23,13 @@ export class AuthController {
     return userData
   }
 
-  @Post()
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  refreshMe(@CurrentUser() user: { id: number, username: string }) {
+    return this.authService.refreshMe(user)
+  }
+
+  @Post('logout')
   logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('token')
     return {
