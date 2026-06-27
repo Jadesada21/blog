@@ -15,7 +15,7 @@ export const useLogin = () => {
         }) => loginApi(username, password),
 
         onSuccess: (data) => {
-            setUser(data.user)
+            setUser({ id: data.id, username: data.username })
         }
     })
 }   
