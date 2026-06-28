@@ -1,4 +1,6 @@
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useLogin } from "../hook/useLogin"
 
 
 export default function Login() {
@@ -31,7 +33,7 @@ export default function Login() {
             />
 
             <button type="submit" disabled={isPending}>
-                {isPending ? 'Login...' : 'Login Success'}
+                {isPending ? 'Login...' : 'Login'}
             </button>
             {error && <p>Login Failed</p>}
         </form>
